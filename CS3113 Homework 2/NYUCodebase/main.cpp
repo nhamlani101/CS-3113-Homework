@@ -30,21 +30,14 @@ struct Paddle {
 };
 
 struct Ball {
-	Ball(float px, float py, float sp, float ac, float dx, float dy) : position_x(px), position_y(py), speed(sp), acceleration(ac), direction_x(dx), direction_y(dy) {}
+	Ball(float px, float py, float sp, float ac, float dx, float dy) : 
+		position_x(px), position_y(py), speed(sp), acceleration(ac), direction_x(dx), direction_y(dy) {}
 	float position_x = 0.0f;
 	float position_y = 0.0f;
 	float speed = 0.05f;
 	float acceleration = 0.0025f;
 	float direction_x = (float)rand();
 	float direction_y = (float)rand();
-
-	void reset() {
-		position_x = 0.0f;
-		position_y = 0.0f;
-		speed = 0.05f;
-		direction_x = (float)rand();
-		direction_y = (float)rand();
-	}
 
 	void move() {
 		position_x += (speed * direction_x);
@@ -73,8 +66,6 @@ int main(int argc, char *argv[])
 	Matrix ball_matrix;
 	Matrix view_matrix;
 	Matrix projection_matrix;
-
-	//GLuint chartreuse_texture_ID = load_texture_rgb("chartreuse.png");
 
 	projection_matrix.setOrthoProjection(-3.55f, 3.55f, -2.0f, 2.0f, -1.0f, 1.0f);
 
@@ -114,6 +105,7 @@ int main(int argc, char *argv[])
 
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
+		//left paddle
 		if (keys[SDL_SCANCODE_W]) {
 			if (paddle_left.top < 2.0f){
 				paddle_left.top += 0.005f;
@@ -129,7 +121,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		// right paddle
+		//right paddle
 		if (keys[SDL_SCANCODE_UP]) {
 			if (paddle_right.top < 2.0f){
 				paddle_right.top += 0.005f;
@@ -186,7 +178,7 @@ int main(int argc, char *argv[])
 			{
 				game_started = false;
 				ball_matrix.Translate(-ball.position_x, -ball.position_y, 0.0f);
-				ball.position_x = 0.0f; // for some reason reset() doesn't work :-(
+				ball.position_x = 0.0f; 
 				ball.position_y = 0.0f;
 				ball.direction_x = 0.05f;
 				ball.direction_y = 0.01f;
@@ -211,7 +203,6 @@ int main(int argc, char *argv[])
 			else if (ball.position_y + 0.1f >= 2.0f || ball.position_y - 0.1f <= -2.0f)
 			{
 				ball.direction_y *= -1;
-				ball.speed += ball.acceleration;
 				ball.move();
 				ball_matrix.Translate(ball.speed * ball.direction_x, ball.speed * ball.direction_y, 0.0f);
 			}
@@ -221,7 +212,6 @@ int main(int argc, char *argv[])
 				(ball.position_x + 0.1f >= paddle_right.left && ball.position_y - 0.1f <= paddle_right.top && ball.position_y + 0.1f >= paddle_right.bottom))
 			{
 				ball.direction_x *= -1;
-				//ball.speed += ball.acceleration;
 				ball.move();
 				ball_matrix.Translate((ball.speed * ball.direction_x), (ball.speed * ball.direction_y), 0.0f);
 			}
