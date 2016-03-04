@@ -17,6 +17,12 @@ void Enemy::Update(const float & player_x_pos, const SheetSprite & player_sprite
 		float elapsed = ticks - lastFrameTicks;
 		lastFrameTicks = ticks;
 
+		x_pos += 0.0005 * elapsed;
+		if (x_pos > 1) {
+			x_pos = 0.0f;
+			y_pos = y_pos - (0.0005 * elapsed);
+		}
+
 		modelMatrix.identity();
 		modelMatrix.Translate(x_pos, y_pos, 0.0f);
 		int trigger = rand() % 50000 + 1;
@@ -41,7 +47,6 @@ void Enemy::Update(const float & player_x_pos, const SheetSprite & player_sprite
 			player_x_pos + player_sprite.width > bullet.x_pos + bullet.sprite.width &&
 			player_x_pos - player_sprite.width < bullet.x_pos - bullet.sprite.width
 			){
-			// rekt also
 			bullet.alive = false;
 			player_alive = false;
 		}
